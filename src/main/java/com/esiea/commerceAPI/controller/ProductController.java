@@ -1,6 +1,9 @@
 package com.esiea.commerceAPI.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +21,8 @@ import java.util.function.Predicate;
 
 @RestController
 public class ProductController {
+	
+
 	
 	@Autowired
 	private ProductService productService;
@@ -50,9 +55,15 @@ public class ProductController {
 	}
 	
 	@DeleteMapping("/product/{id}")
-	public void deleteProduct(@PathVariable("id") long id)
+	public ResponseEntity<String> deleteProduct(@PathVariable("id") long id) throws NotFOundException
 	{
-		productService.delete(id);
+		try {
+			productService.delete(id);
+			return new  ResponseEntity<>(HttpStatus.OK);
+		} catch (NotFOundException e) {
+			return new  ResponseEntity<>( HttpStatus.NOT_FOUND);
+		}
+		
 	}
 }
 
