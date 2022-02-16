@@ -33,4 +33,10 @@ public class ProductService {
 		// Insère l'objet et le retourne
 		return productRepository.save(product);
 	}
+
+	public void delete(long id) {
+		// TODO Auto-generated method stub
+		productRepository.deleteById(id);
+	}
+	
 }
