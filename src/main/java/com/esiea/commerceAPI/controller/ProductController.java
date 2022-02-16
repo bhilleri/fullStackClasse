@@ -3,6 +3,8 @@ package com.esiea.commerceAPI.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +41,11 @@ public class ProductController {
 			return new  ResponseEntity<Product>(HttpStatus.NOT_FOUND);
 		}
 		
+	}
+	
+	@PostMapping("/product")
+	public Product createProduct(@RequestBody Product product) {
+		return productService.save(product);
 	}
 }
 

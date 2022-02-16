@@ -27,4 +27,10 @@ public class ProductService {
 			throw new NotFOundException();
 		}
 	}
+
+	public Product save(Product product) {
+		// verification de la donnée
+		// Insère l'objet et le retourne
+		return productRepository.save(product);
+	}
 }
