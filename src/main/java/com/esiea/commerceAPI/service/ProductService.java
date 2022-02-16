@@ -1,5 +1,7 @@
 package com.esiea.commerceAPI.service;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.esiea.commerceAPI.modele.Product;
 import com.esiea.commerceAPI.repository.ProductRepository;
 
-import net.bytebuddy.dynamic.DynamicType.Builder.FieldDefinition.Optional;
 
 @Service
 public class ProductService {
@@ -56,6 +57,13 @@ public class ProductService {
 			logger.warn(id + " not found.");
 			throw new NotFOundException();
 		}
+	}
+
+	public Product getByName(String name) throws NotFOundException {
+		Optional<Product> product =  productRepository.findByName(name);
+		if(product.isPresent())
+			return product.get();
+		throw new NotFOundException();
 	}
 	
 }

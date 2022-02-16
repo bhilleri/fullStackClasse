@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,6 +23,7 @@ import com.esiea.commerceAPI.service.ProductService;
 
 import java.util.function.Predicate;
 
+@CrossOrigin()
 @RestController
 public class ProductController {
 	
@@ -49,6 +51,18 @@ public class ProductController {
 		catch (NotFOundException e){
 			return new  ResponseEntity<Product>(HttpStatus.NOT_FOUND);
 		}
+		
+	}
+	
+	@GetMapping("/product/name/{name}")
+	public ResponseEntity<Product> getProductByName(@PathVariable("name") String name){
+		try {
+			Product p = productService.getByName(name);
+			return new ResponseEntity<Product>(p ,HttpStatus.OK);
+		}catch(NotFOundException e) {
+			return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
+		}
+		
 		
 	}
 	
