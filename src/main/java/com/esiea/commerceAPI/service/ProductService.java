@@ -33,7 +33,7 @@ public class ProductService {
 		}
 	}
 
-	public Product save(Product product) {
+	public Product upsert(Product product) {
 		// verification de la donnée
 		// Insère l'objet et le retourne
 		return productRepository.save(product);
