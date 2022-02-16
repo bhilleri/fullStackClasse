@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.esiea.commerceAPI.modele.Product;
+import com.esiea.commerceAPI.service.NotAllowedException;
 import com.esiea.commerceAPI.service.NotFOundException;
 import com.esiea.commerceAPI.service.ProductService;
 
@@ -42,7 +43,7 @@ public class ProductController {
 	@GetMapping("/product/{id}")
 	public ResponseEntity<Product> getProduct(@PathVariable("id") long id) {
 		try {
-			 Product p =  productService.getProduit(id);
+			 Product p =  productService.getProduct(id);
 			 return new  ResponseEntity<Product>(p, HttpStatus.OK);
 		}
 		catch (NotFOundException e){
@@ -52,8 +53,13 @@ public class ProductController {
 	}
 	
 	@PostMapping("/product")
-	public Product createProduct(@RequestBody Product product) {
-		return productService.upsert(product);
+	public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+		try {
+			Product p =  productService.create(product);
+			return new ResponseEntity<>(p, HttpStatus.OK);
+		} catch (NotAllowedException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		}
 	}
 	
 	@DeleteMapping("/product/{id}")
@@ -69,14 +75,20 @@ public class ProductController {
 	}
 	
 	@PutMapping("/product")
-	public Product replaceProduct(@RequestBody Product product) {
-		return productService.upsert(product);
+	public ResponseEntity<Product> replaceProduct(@RequestBody Product product) {
+		try {
+			Product p = productService.update(product);
+			return new ResponseEntity<>(p, HttpStatus.OK);
+		} catch (NotFOundException e) {
+			// TODO Auto-generated catch block
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@PatchMapping("/product")
 	public ResponseEntity<Product> partielReplaceProduct(@RequestBody Product product){
 		try {
-			Product existingProduct = productService.getProduit(product.getId());
+			Product existingProduct = productService.getProduct(product.getId());
 			if(product.getName() != null && !product.getName().equals(existingProduct.getName()))
 				existingProduct.setName(product.getName());
 			if(product.getCost() != null && !product.getCost().equals(existingProduct.getCost()))
@@ -87,8 +99,7 @@ public class ProductController {
 		}catch (NotFOundException e){
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
-		
+
 	}
 }
 

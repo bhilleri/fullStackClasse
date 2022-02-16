@@ -23,7 +23,7 @@ public class ProductService {
 		return productRepository.findAll();
 	}
 
-	public Product getProduit(long id) throws NotFOundException {
+	public Product getProduct(long id) throws NotFOundException {
 		java.util.Optional<Product> resultat = productRepository.findById(id);
 		if(resultat.isPresent()) {
 			return resultat.get();
@@ -33,9 +33,18 @@ public class ProductService {
 		}
 	}
 
-	public Product upsert(Product product) {
+	public Product create(Product product) throws NotAllowedException {
 		// verification de la donnée
 		// Insère l'objet et le retourne
+		if(product.getId() == null)
+			return productRepository.save(product);
+		throw new NotAllowedException();
+	}
+	
+	public Product update(Product product) throws NotFOundException {
+		// verification de la donnée
+		// Insère l'objet et le retourne
+		getProduct(product.getId());
 		return productRepository.save(product);
 	}
 

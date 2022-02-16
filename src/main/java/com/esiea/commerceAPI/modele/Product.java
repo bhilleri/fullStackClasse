@@ -12,12 +12,12 @@ import javax.persistence.Table;
 public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	@Column(name="productname")
 	private String name;
 	private String description;
 	private Integer cost;
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 	public void setId(long id) {
@@ -45,7 +45,7 @@ public class Product {
 	public Product() {
 		
 	}
-	public Product(long id, String name, String description, Integer cost) {
+	public Product(Long id, String name, String description, Integer cost) {
 		super();
 		this.id = id;
 		this.name = name;
