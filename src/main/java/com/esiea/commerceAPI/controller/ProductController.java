@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import java.util.function.Predicate;
 
 @CrossOrigin()
 @RestController
+@RequestMapping("product")
 public class ProductController {
 	
 
@@ -32,7 +34,7 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 	
-	@GetMapping("/product")
+	@GetMapping("")
 	public Iterable <Product> getProducts(){
 		return productService.getProducts();
 	}
@@ -42,7 +44,7 @@ public class ProductController {
 	    return p -> p.getId() == id;
 	}
 	
-	@GetMapping("/product/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Product> getProduct(@PathVariable("id") long id) {
 		try {
 			 Product p =  productService.getProduct(id);
@@ -54,7 +56,7 @@ public class ProductController {
 		
 	}
 	
-	@GetMapping("/product/name/{name}")
+	@GetMapping("/name/{name}")
 	public ResponseEntity<Product> getProductByName(@PathVariable("name") String name){
 		try {
 			Product p = productService.getByName(name);
@@ -62,11 +64,9 @@ public class ProductController {
 		}catch(NotFOundException e) {
 			return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
 		}
-		
-		
 	}
 	
-	@PostMapping("/product")
+	@PostMapping("")
 	public ResponseEntity<Product> createProduct(@RequestBody Product product) {
 		try {
 			Product p =  productService.create(product);
@@ -76,7 +76,7 @@ public class ProductController {
 		}
 	}
 	
-	@DeleteMapping("/product/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteProduct(@PathVariable("id") long id) throws NotFOundException
 	{
 		try {
@@ -88,7 +88,7 @@ public class ProductController {
 		
 	}
 	
-	@PutMapping("/product")
+	@PutMapping("")
 	public ResponseEntity<Product> replaceProduct(@RequestBody Product product) {
 		try {
 			Product p = productService.update(product);
@@ -99,7 +99,7 @@ public class ProductController {
 		}
 	}
 	
-	@PatchMapping("/product")
+	@PatchMapping("")
 	public ResponseEntity<Product> partielReplaceProduct(@RequestBody Product product){
 		try {
 			Product existingProduct = productService.getProduct(product.getId());
