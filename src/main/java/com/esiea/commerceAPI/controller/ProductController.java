@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -70,6 +71,24 @@ public class ProductController {
 	@PutMapping("/product")
 	public Product replaceProduct(@RequestBody Product product) {
 		return productService.upsert(product);
+	}
+	
+	@PatchMapping("/product")
+	public ResponseEntity<Product> partielReplaceProduct(@RequestBody Product product){
+		try {
+			Product existingProduct = productService.getProduit(product.getId());
+			if(product.getName() != null && !product.getName().equals(existingProduct.getName()))
+				existingProduct.setName(product.getName());
+			if(product.getCost() != null && !product.getCost().equals(existingProduct.getCost()))
+				existingProduct.setCost(product.getCost());
+			if(product.getDescription() != null && !product.getDescription().equals(existingProduct.getDescription()))
+				existingProduct.setDescription(product.getDescription());
+			return new ResponseEntity<>(existingProduct, HttpStatus.OK);
+		}catch (NotFOundException e){
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		
 	}
 }
 
